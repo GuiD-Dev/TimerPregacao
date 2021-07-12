@@ -1,5 +1,8 @@
 <div id="texto"></div>
-<button id="botao" onclick="exec()">Iniciar</button>
+<div style="text-align: center;">
+    <button id="botaoExec" onclick="exec()">Iniciar</button>
+    <button id="botaoRest" onclick="restart()">Reiniciar</button>
+</div>
 
 <style>
     body {
@@ -13,9 +16,10 @@
         font-family: Arial, sans-serif;
     }
 
-    #botao {
+    #botaoExec, #botaoRest {
         font-size: 100px;
         cursor: pointer;
+        width: 45%;
     }
 </style>
 
@@ -24,23 +28,35 @@
     document.getElementById('texto').innerHTML = `${date.toLocaleTimeString().substring(3,8)}`;
     let running = false;
     let counter = 0;
+    let timer = null;
 
     function exec() {
         running = !running;
-        document.getElementById('botao').innerHTML = 'Parar';
 
-        setInterval(
-            () => {
-                date.setSeconds(date.getSeconds() + 1);
-                document.getElementById('texto').innerHTML = `${date.toLocaleTimeString().substring(3,8)}`;
+        if (running) {
+            document.getElementById('botaoExec').innerHTML = 'Parar';
             
-                counter++;
-                if (counter >= 1800)
-                    document.getElementById('texto').style = 'color: red;';
-                else if (counter >= 1200)
-                    document.getElementById('texto').style = 'color: yellow;';
-            },
-            1000
-        );
+            timer = setInterval(
+                () => {
+                    date.setSeconds(date.getSeconds() + 1);
+                    document.getElementById('texto').innerHTML = `${date.toLocaleTimeString().substring(3,8)}`;
+                
+                    counter++;
+                    if (counter >= 1800)
+                        document.getElementById('texto').style = 'color: red;';
+                    else if (counter >= 1200)
+                        document.getElementById('texto').style = 'color: yellow;';
+                },
+                1000
+            );
+        }
+        else {
+            document.getElementById('botaoExec').innerHTML = 'Iniciar';
+            clearInterval(timer);
+        }
+    }
+
+    function restart() {
+        location.reload();
     }
 </script>
