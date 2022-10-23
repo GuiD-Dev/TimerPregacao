@@ -1,0 +1,89 @@
+<button onclick="window.location.href='index.html'">Voltar</button>
+<br/>
+<div id="tempo">
+    <input type="number" name="tempo" id="campoTempo" />
+</div>
+<br/>
+<div id="texto"></div>
+<div style="text-align: center;">
+    <button id="botaoExec" onclick="exec()">Iniciar</button>
+    <button id="botaoRest" onclick="restart()">Reiniciar</button>
+</div>
+
+<style>
+    body {
+        background-color: black;
+    }
+
+    #tempo {
+        display: flex;
+    }
+
+    .labelCampo {
+        background-color: aliceblue;
+    }
+
+    #campoTempo {
+        margin: 0px auto;
+        width: 10%;
+        font-size: x-large;
+    }
+
+    #texto {
+        color: whitesmoke;
+        font-size: 700px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        margin: -25px 0px;
+    }
+
+    #botaoExec, #botaoRest {
+        font-size: 100px;
+        cursor: pointer;
+        width: 45%;
+    }
+</style>
+
+<script>
+    let date = new Date(0,0,0,0,0,0);
+    document.getElementById('texto').innerHTML = `${date.toLocaleTimeString().substring(3,8)}`;
+    let running = false;
+    let currentTime = '00:00';
+    let timer = null;
+
+    function exec() {
+        if (currentTime == '00:00') {
+            date = new Date(0,0,0,0,0,document.getElementById('campoTempo').value);
+            currentTime = `${date.toLocaleTimeString().substring(3,8)}`;
+            document.getElementById('texto').value = currentTime;
+        }
+        running = !running;
+
+        if (running) {
+            document.getElementById('botaoExec').innerHTML = 'Parar';
+            
+            timer = setInterval(
+                () => {
+                    date.setSeconds(date.getSeconds() - 1);
+                    currentTime = `${date.toLocaleTimeString().substring(3,8)}`;
+                    document.getElementById('texto').innerHTML = currentTime;
+                
+                    if (currentTime == '00:00') {
+                        document.getElementById('botaoExec').innerHTML = 'Iniciar';
+                        clearInterval(timer);
+                        running = !running;
+                    }
+                },
+                1000
+            );
+        }
+        else {
+            document.getElementById('botaoExec').innerHTML = 'Iniciar';
+            clearInterval(timer);
+        }
+    }
+
+    function restart() {
+        location.reload();
+    }
+</script>
